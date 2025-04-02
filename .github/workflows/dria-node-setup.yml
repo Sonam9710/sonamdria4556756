@@ -1,0 +1,28 @@
+name: Setup Dria Compute Node
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  setup-node:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/download/linux | bash
+          ollama --version
+
+      - name: Install Dria Launcher
+        run: |
+          curl -fsSL https://dria.co/launcher | bash
+
+      - name: Start Dria Compute Node
+        run: |
+          echo "${{ secrets.EVM_PRIVATE_KEY }}" | sudo dkn-compute-launcher start
